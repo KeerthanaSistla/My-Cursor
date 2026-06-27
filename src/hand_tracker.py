@@ -7,9 +7,10 @@ class HandTracker:
 
     def __init__(self):
 
-        self.mpHands = mp.solutions.hands
+        self.mp_hands = mp.solutions.hands
 
-        self.hands = self.mpHands.Hands(
+        self.hands = self.mp_hands.Hands(
+            static_image_mode=False,
             max_num_hands=config.MAX_HANDS,
             min_detection_confidence=config.DETECTION_CONFIDENCE,
             min_tracking_confidence=config.TRACKING_CONFIDENCE
@@ -23,25 +24,55 @@ class HandTracker:
 
         results = self.hands.process(rgb)
 
-        landmarks = []
+        detected_hands = []
 
         if results.multi_hand_landmarks:
 
-            hand = results.multi_hand_landmarks[0]
+            frame_height, frame_width, _ = frame.shape
 
-            self.drawer.draw_landmarks(
-                frame,
-                hand,
-                self.mpHands.HAND_CONNECTIONS
-            )
+            for hand_landmarks, handedness in zip(
+                results.multi_hand_landmarks,
+                results.multi_handedness
+            ):
 
-            h, w, _ = frame.shape
+                if config.SHOW_CONNECTIONS:
 
-            for id, lm in enumerate(hand.landmark):
+                    self.drawer.draw_landmarks(
+                        frame,
+                        hand_landmarks,
+                        self.mp_hands.HAND_CONNECTIONS
+                    )
 
-                x = int(lm.x * w)
-                y = int(lm.y * h)
+                landmarks = []
 
-                landmarks.append((id, x, y))
+                for index, landmark in enumerate(hand_landmarks.landmark):
 
-        return frame, landmarks
+                    x = int(landmark.x * frame_width)
+                    y = int(landmark.y * frame_height)
+
+                    landmarks.append(
+                        {
+                            "id": index,
+                            "x": x,
+                            "y": y
+                        }
+                    )
+
+                    if config.SHOW_LANDMARKS:
+
+                        cv2.circle(
+                            frame,
+                            (x, y),
+                            4,
+                            (0, 0, 255),
+                            -1
+                        )
+
+                detected_hands.append(
+                    {
+                        "label": handedness.classification[0].label,
+                        "landmarks": landmarks
+                    }
+                )
+
+        return frame, detected_hands
