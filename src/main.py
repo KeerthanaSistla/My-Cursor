@@ -1,12 +1,22 @@
 import cv2
-import pyautogui
+
+import config
+
 from hand_tracker import HandTracker
+from gesture_detector import GestureDetector
+from mouse_controller import MouseController
+
 
 camera = cv2.VideoCapture(0)
 
+camera.set(cv2.CAP_PROP_FRAME_WIDTH, config.CAMERA_WIDTH)
+camera.set(cv2.CAP_PROP_FRAME_HEIGHT, config.CAMERA_HEIGHT)
+
 tracker = HandTracker()
 
-screen_width, screen_height = pyautogui.size()
+gesture = GestureDetector()
+
+mouse = MouseController()
 
 while True:
 
@@ -21,21 +31,37 @@ while True:
 
     if landmarks:
 
-        _, x, y = landmarks[8]
+        x, y = gesture.get_cursor(landmarks)
 
-        camera_height, camera_width, _ = frame.shape
+        h, w, _ = frame.shape
 
-        screen_x = int((x / camera_width) * screen_width)
-        screen_y = int((y / camera_height) * screen_height)
+        mouse.move(x, y, w, h)
 
-        cv2.circle(frame, (x, y), 15, (0, 0, 255), -1)
+        state = gesture.detect_left_button(landmarks)
 
-        pyautogui.moveTo(screen_x, screen_y)
+        if state == "DOWN":
+            mouse.left_down()
+
+        elif state == "UP":
+            mouse.left_up()
+
+        cv2.circle(frame, (x, y), 12, (0, 0, 255), -1)
+
+        cv2.putText(
+            frame,
+            state,
+            (20, 40),
+            cv2.FONT_HERSHEY_SIMPLEX,
+            1,
+            (255, 0, 0),
+            2
+        )
 
     cv2.imshow("MyCursor", frame)
 
-    if cv2.waitKey(1) & 0xFF == ord("q"):
+    if cv2.waitKey(1) == ord("q"):
         break
 
 camera.release()
+
 cv2.destroyAllWindows()
