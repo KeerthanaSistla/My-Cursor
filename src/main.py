@@ -1,9 +1,12 @@
 import cv2
+import pyautogui
 from hand_tracker import HandTracker
 
 camera = cv2.VideoCapture(0)
 
 tracker = HandTracker()
+
+screen_width, screen_height = pyautogui.size()
 
 while True:
 
@@ -18,21 +21,16 @@ while True:
 
     if landmarks:
 
-        index_tip = landmarks[8]
+        _, x, y = landmarks[8]
 
-        _, x, y = index_tip
+        camera_height, camera_width, _ = frame.shape
+
+        screen_x = int((x / camera_width) * screen_width)
+        screen_y = int((y / camera_height) * screen_height)
 
         cv2.circle(frame, (x, y), 15, (0, 0, 255), -1)
 
-        cv2.putText(
-            frame,
-            f"X:{x}  Y:{y}",
-            (20, 50),
-            cv2.FONT_HERSHEY_SIMPLEX,
-            1,
-            (255, 0, 0),
-            2
-        )
+        pyautogui.moveTo(screen_x, screen_y)
 
     cv2.imshow("MyCursor", frame)
 
