@@ -1,5 +1,6 @@
 import math
-import config
+from . import config
+
 
 
 class GestureDetector:

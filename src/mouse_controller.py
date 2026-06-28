@@ -1,5 +1,6 @@
 import pyautogui
-import config
+from . import config
+
 
 
 class MouseController:

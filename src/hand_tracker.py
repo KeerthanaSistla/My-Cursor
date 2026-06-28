@@ -1,6 +1,7 @@
 import cv2
 import mediapipe as mp
-import config
+from . import config
+
 
 
 class HandTracker:
@@ -26,6 +27,7 @@ class HandTracker:
 
         detected_hands = []
 
+        # If no hands are detected, return an empty list for consistency.
         if results.multi_hand_landmarks:
 
             frame_height, frame_width, _ = frame.shape

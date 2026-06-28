@@ -1,10 +1,11 @@
 import cv2
 import time
 
-import config
-from hand_tracker import HandTracker
-from gesture_detector import GestureDetector
-from mouse_controller import MouseController
+from . import config
+from .hand_tracker import HandTracker
+from .gesture_detector import GestureDetector
+from .mouse_controller import MouseController
+
 
 
 def main():
