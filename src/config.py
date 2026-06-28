@@ -35,27 +35,32 @@ MOVE_SPEED = 1.0
 # Mouse Gestures
 # ==========================================
 
-PINCH_DISTANCE = 35
+# Thumb + Index pinch for left click/drag
+PINCH_DOWN_DISTANCE = 40
+PINCH_HOLD_DISTANCE = 55
 
-RIGHT_CLICK_DISTANCE = 35
+PINCH_DEBOUNCE_FRAMES = 5
+
+
+RIGHT_CLICK_DISTANCE = 40
 
 
 # ==========================================
 # Scroll Settings
 # ==========================================
 
-SCROLL_SPEED = 6
+SCROLL_SPEED = 2
 
-SCROLL_DEADZONE = 5
+SCROLL_DEADZONE = 10
 
 
 # ==========================================
 # Zoom Settings
 # ==========================================
 
-ZOOM_SPEED = 6
+ZOOM_SPEED = 3
 
-ZOOM_DEADZONE = 5
+ZOOM_DEADZONE = 10
 
 
 # ==========================================

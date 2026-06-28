@@ -1,6 +1,5 @@
-- [ ] Verify project runs (python import + start camera loop)
-- [ ] Reduce gesture jitter: add landmark smoothing and hysteresis to click/scroll/zoom thresholds
-- [ ] Fix right-click/scroll/zoom behavior to avoid repeated triggers near deadzones
-- [ ] Add safety: clamp coordinates and ignore invalid/empty hand detections
-- [x] Make `HandTracker.process()` return an empty hand list when no hands are detected
+# TODO
+- [x] Implement hysteresis + debouncing for thumb-index pinch left-click/hold gesture
+- [x] Add/adjust new config parameters for press/hold thresholds and debounce frame count
+- [ ] Run the app and test drawing in Paint (thumb+index pinch while moving)
 
